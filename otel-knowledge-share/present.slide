@@ -1,0 +1,97 @@
+# Open-Telemetry
+
+Connor Kelly
+20 Apr 2023
+connor.kelly@hashicorp.com
+
+## What is it
+
+CNCF project
+Vendor agnostic spec and data format
+Provides:
+* Tools
+* APIs
+* SDK
+* Conventions
+
+## Architecture
+
+Signals
+
+Context Propagation
+
+.link https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/overview.md
+
+: Clients are organized into signals. Metrics, logs, traces, and baggage are all considered signals. Context propagation allows storing state and accessing data for the life of a transaction
+
+## Traces
+* DAG of spans
+* Each span is a portion of work
+* Belongs to a single trace (unit of work)
+
+.link https://github.com/open-telemetry/opentelemetry-specification/tree/main/specification/trace
+
+## Metrics
+
+Aggregated measurement with attributes
+
+* Measure: individual values recorded by the library. Aggregated into metrics
+* Measurement: single value collected for a measure
+* Metric: Aggregates individual measurements
+
+.link https://github.com/open-telemetry/opentelemetry-specification/tree/main/specification/metrics
+
+## Logs
+
+Data model (mostly)
+
+Embedded in a span as an event
+
+.link https://github.com/open-telemetry/opentelemetry-specification/blob/main/specification/logs/data-model.md
+
+## Instrumentation Scope
+
+* Unit of application code that telemetry is associated with
+* All signal SDKs have the instrumentation scope as a required input
+
+: Developers choice to decide a reasonable instrumentation scope. Most common approach is to use the library name, module, package or class as the scope.
+
+## Vendor support
+
+* Datadog
+* Honeycomb
+* Dynatrace
+* Lightstep
+
+: Open-Telemetry originally started as the merging of opentracing and opencensus, but most vendors chose not to support the data format or required a translator or explicit export format so that it was usable in their systems. This has changed with open-telemetry. Most vendors support open-telemetry in some way and the collector helps with that because it provides that neutral spot for users to push data from their applications to any number of providers
+
+## Collector
+
+Open-Telemetry provided component to process signals
+
+: The otel-collector is a collection of receivers, processors, and exporters. All components are organized into a pipeline for each type of Signal. 
+
+## Receiver
+
+* otlphttp
+* otlpgrpc
+* prometheus
+
+: receivers are the entry point for a pipeline. Translates from the input format into the otlp format
+
+## Processor
+
+* filter
+* resource
+* sampling
+* batch
+
+: Modify data as it's passing through the pipeline
+
+## Exporter
+
+* otlphttp
+* otlpgrpc
+
+: writes data to another location in the specified format. Translates from otlp format to another if necessary
+
